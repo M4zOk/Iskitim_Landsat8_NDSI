@@ -5,11 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Iskitim"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="0,0,0,-6">
-        <Button Content="NDSI" HorizontalAlignment="Left" Margin="622,102,0,0" VerticalAlignment="Top" Height="74" Width="168" Click="Button_Click"/>
-        <Button Content="Калибровка изображения" HorizontalAlignment="Left" Margin="622,36,0,0" VerticalAlignment="Top" Width="168" Height="61" Click="Button_Click_1"/>
-        <Image x:Name="image" Stretch="Uniform"  HorizontalAlignment="Left" Height="404" Margin="10,10,0,0" VerticalAlignment="Top" Width="582"/>
+        Title="Iskitin" Height="241" Width="477">
+    <Grid Margin="10,0,0,-6">
+        <Button Content="NDSI" HorizontalAlignment="Left" Margin="257,0,0,0" VerticalAlignment="Center" Height="61" Width="168" Click="Button_Click"/>
+        <Button Content="Калибровка изображения" HorizontalAlignment="Left" Margin="43,0,0,0" VerticalAlignment="Center" Width="168" Height="61" Click="Button_Click_1"/>
         <TextBlock HorizontalAlignment="Left" Margin="-126,190,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 
     </Grid>
