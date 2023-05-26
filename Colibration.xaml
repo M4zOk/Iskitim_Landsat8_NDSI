@@ -5,12 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Iskitim"
         mc:Ignorable="d"
-        Title="Colibration" Height="291" Width="551">
-    <Grid Margin="0,0,69,-6">
-        <Button Content="Увеличить в 2 раза" HorizontalAlignment="Left" Margin="126,179,0,0" VerticalAlignment="Top" Height="44" Width="132" Click="Button_Click"/>
-        <Button Content="Уменьшить в 2 раза" HorizontalAlignment="Left" Margin="312,180,0,0" VerticalAlignment="Top" Width="130" Height="42" Click="Button_Click_1"/>
-        <Label Content="Для канала 3 и 6 лучше выбрать увеличить в е раза&#xD;&#xA;" HorizontalAlignment="Left" Margin="150,47,0,0" VerticalAlignment="Top" Width="323" Height="35"/>
-        <Label Content="Для канала 8 лучше выбрать уменьшить в е раза&#xA;" HorizontalAlignment="Left" Margin="150,82,0,0" VerticalAlignment="Top" Width="323" Height="35"/>
+        Title="Colibration" Height="232" Width="441">
+    <Grid Margin="0,0,10,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="62*"/>
+            <ColumnDefinition Width="411*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Увеличить в 2 раза" HorizontalAlignment="Left" Margin="2,143,0,0" VerticalAlignment="Top" Height="44" Width="132" Click="Button_Click" Grid.Column="1"/>
+        <Button Content="Уменьшить в 2 раза" HorizontalAlignment="Left" Margin="203,145,0,0" VerticalAlignment="Top" Width="130" Height="42" Click="Button_Click_1" Grid.Column="1"/>
+        <Label Content="Для каналов 3 и 6 лучше использовать увеличение в 2 раза" HorizontalAlignment="Left" Margin="56,42,0,0" VerticalAlignment="Top" Width="354" Height="35" Grid.ColumnSpan="2"/>
+        <Label Content="Для канала 8 лучше использовать уменьшение в 2 раза&#xA;" HorizontalAlignment="Left" Margin="56,77,0,0" VerticalAlignment="Top" Width="323" Height="35" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>

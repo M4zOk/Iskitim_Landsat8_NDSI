@@ -16,7 +16,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Controls;
 using System.IO;
 using System.Runtime.InteropServices;
-//using System.Drawing.Drawing2D;
 
 namespace Iskitim
 {
@@ -43,10 +42,9 @@ namespace Iskitim
                 path = openFileDialog.FileName;
 
             string path2 = "C:\\";
-            openFileDialog.InitialDirectory = path2;
+            openFileDialog.InitialDirectory = path;
             if (openFileDialog.ShowDialog() == true)
                 path2 = openFileDialog.FileName;
-
 
             Gdal.AllRegister();
 
@@ -87,7 +85,7 @@ namespace Iskitim
                 ndsi[i] = (red[i] - nir[i]) / (red[i] + nir[i]);
                 if (ndsi[i] > porog)
                 {
-                    ndsi[i] = porog;
+                    ndsi[i] = 255; // Белый цвет
                 }
 
                 Console.WriteLine(ndsi[i]);
@@ -117,149 +115,35 @@ namespace Iskitim
 
             MessageBoxResult result = MessageBox.Show("файл успешно сохранен");
 
-            //Bitmap image = new Bitmap(path3);
-            //Bitmap newImage = new Bitmap(image.Width, image.Height);
+            
 
-            //for (int i = 0; i < image.Width; i++)
-            //{
-            //    for (int j = 0; j < image.Height; j++)
-            //    {
-            //        Color pixelColor = image.GetPixel(i, j);
-
-            //        int grayValue = (int)((pixelColor.R * 0.3f) + (pixelColor.G * 0.59f) + (pixelColor.B * 0.11f));
-            //        int newRed = 255 - grayValue;
-            //        int newGreen = 255 - grayValue;
-            //        int newBlue = 0;
-
-            //        Color newColor = Color.FromArgb(pixelColor.A, newRed, newGreen, newBlue);
-            //        newImage.SetPixel(i, j, newColor);
-            //    }
-            //}
-
-            //newImage.Save(path3 + "1.tif", ImageFormat.Tiff);
-
-            //// Открыть TIF файл
-            //Bitmap tifImage = new Bitmap(path3);
-            //byte[,] pixels = new byte[width, height];
-
-            //for (int x = 0; x < width; x++)
-            //{
-            //    for (int y = 0; y < height; y++)
-            //    {
-            //        Color color = tifImage.GetPixel(x, y);
-            //        byte intensity = (byte)((color.R + color.G + color.B) / 3);
-            //        pixels[x, y] = intensity;
-            //    }
-            //}
-
-            //// Изменить градиент
-            //for (int x = 0; x < width; x++)
-            //{
-            //    for (int y = 0; y < height; y++)
-            //    {
-            //        byte intensity = pixels[x, y];
-            //        byte yellow = 255;
-            //        byte black = 0;
-
-            //        if (intensity < 128)
-            //        {
-            //            yellow = (byte)(255 - 2 * intensity);
-            //        }
-            //        else
-            //        {
-            //            black = (byte)(2 * (intensity - 128));
-            //            yellow = (byte)(255 - black);
-            //        }
-
-            //        tifImage.SetPixel(x, y, Color.FromArgb(yellow, yellow, black));
-            //    }
-            //}
-            //// Сохранить измененный файл
-            //tifImage.Save(path3 + "1.tif", ImageFormat.Tiff);
-
-            //Bitmap image = new Bitmap(path3);
-            //Bitmap newImage = new Bitmap(image.Width, image.Height);
-            //for (int i = 0; i < image.Width; i++)
-            //{
-            //    for (int j = 0; j < image.Height; j++)
-            //    {
-            //        Color pixelColor = image.GetPixel(i, j);
-
-            //        int grayValue = (int)((pixelColor.R * 0.3f) + (pixelColor.G * 0.59f) + (pixelColor.B * 0.11f));
-            //        int newRed = 255 - grayValue;
-            //        int newGreen = 255 - grayValue;
-            //        int newBlue = 0;
-
-            //        Color newColor = Color.FromArgb(pixelColor.A, newRed, newGreen, newBlue);
-            //        newImage.SetPixel(i, j, newColor);
-            //    }
-            //}
-            //newImage.Save(path3 + "1.tif", ImageFormat.Tiff);
-
-            //Bitmap bmp = new Bitmap(path3);
-            //for (int y = 0; y < bmp.Height; y++)
-            //{
-            //    for (int x = 0; x < bmp.Width; x++)
-            //    {
-            //        Color pixelColor = bmp.GetPixel(x, y);
-            //        int gray = (int)(0.299 * pixelColor.R + 0.587 * pixelColor.G + 0.114 * pixelColor.B);
-
-            //        int redd = (int)(255 * Math.Min(1.0, gray / 128.0));
-            //        int green = (int)(255 * Math.Max(0.0, (gray - 128.0) / 128.0));
-            //        int blue = 255;
-
-            //        Color newColor = Color.FromArgb(redd, green, blue);
-            //        bmp.SetPixel(x, y, newColor);
-            //    }
-            //}
-            //bmp.Save(path3 + "1.tif", ImageFormat.Tiff);
-            string photo = path3+ "1.tif";
+            // открываем изображение
             Bitmap bmp = new Bitmap(path3);
-            List<Color> colors = new List<Color>();
-            for (int x = 0; x < bmp.Width; x++)
-            {
-                Color color = bmp.GetPixel(x, 0);
-                if (!colors.Contains(color))
-                {
-                    colors.Add(color);
-                }
-            }
+            // определяем цвет, который нужно заменить
+            Color replaceColor = Color.White;
+            // определяем цвет, на который нужно заменить
+            Color newColor = Color.Yellow;
 
-            foreach (Color color in colors)
+            // проходим по каждому пикселю изображения
+            for (int y = 0; y < bmp.Height; y++)
             {
-                if (color.R < 128 && color.G < 128 && color.B < 128)
+                for (int x = 0; x < bmp.Width; x++)
                 {
-                    bmp = ReplaceColor(bmp, color, Color.Black);
-                }
-                else if (color.R >= 128 && color.G >= 128 && color.B < 128)
-                {
-                    bmp = ReplaceColor(bmp, color, Color.Yellow);
-                }
-            }
-
-            bmp.Save(path3 + "1.tif");
-
-            Bitmap ReplaceColor(Bitmap bmp2, Color fromColor, Color toColor)
-            {
-                Bitmap result2 = new Bitmap(bmp2.Width, bmp2.Height);
-                for (int x = 0; x < bmp2.Width; x++)
-                {
-                    for (int y = 0; y < bmp2.Height; y++)
+                    // получаем текущий цвет пикселя
+                    Color pixelColor = bmp.GetPixel(x, y);
+                    // проверяем, если цвет пикселя соответствует цвету, который нужно заменить
+                    if (pixelColor.ToArgb() == replaceColor.ToArgb())
                     {
-                        if (bmp2.GetPixel(x, y) == fromColor)
-                        {
-                            result2.SetPixel(x, y, toColor);
-                        }
-                        else
-                        {
-                            result2.SetPixel(x, y, bmp2.GetPixel(x, y));
-                        }
+                        // заменяем цвет пикселя на новый
+                        bmp.SetPixel(x, y, newColor);
                     }
                 }
-                return result2;
             }
 
+            // сохраняем измененное изображение
+            bmp.Save(path3+"test.tif", ImageFormat.Tiff);
 
+            string photo = path3 + "test.tif";
             Console.WriteLine(path3);
             image.Source = new BitmapImage(new Uri(photo));
         }
@@ -270,3 +154,4 @@ namespace Iskitim
         }
     }
 }
+     
