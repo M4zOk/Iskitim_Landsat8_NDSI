@@ -18,8 +18,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 //using System.Drawing.Drawing2D;
 
-
-
 namespace Iskitim
 {
 
