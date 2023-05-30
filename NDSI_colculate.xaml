@@ -6,9 +6,10 @@
         mc:Ignorable="d"
         Title="NDSI_colculate" Height="450" Width="800">
     <Grid>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="398" Margin="10,10,0,0" VerticalAlignment="Top" Width="425"/>
-        <Label Content="Введите значение NDSI от 0.1 до 0.6" HorizontalAlignment="Left" Margin="524,54,0,0" VerticalAlignment="Top"/>
-        <TextBox Name="txt" HorizontalAlignment="Left" Margin="524,102,0,0" TextWrapping="Wrap" Text="0,1" VerticalAlignment="Top" Width="120" Height="27" TextChanged="txt_TextChanged"/>
-        <Button Content="NDSI" HorizontalAlignment="Left" Margin="649,93,0,0" VerticalAlignment="Top" Height="45" Width="118" Click="Button_Click2"/>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="398" Margin="32,10,0,0" VerticalAlignment="Top" Width="425"/>
+        <Label Content="Введите значение NDSI от 0.1 до 0.6" HorizontalAlignment="Left" Margin="571,49,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="txt" HorizontalAlignment="Left" Margin="618,80,0,0" TextWrapping="Wrap" Text="0,1" VerticalAlignment="Top" Width="120" Height="27" TextChanged="txt_TextChanged"/>
+        <Button Content="Выделить область снега" HorizontalAlignment="Left" Margin="605,123,0,0" VerticalAlignment="Top" Height="46" Width="141" Click="Button_Click2"/>
+        <Button Content="Спектральная яркость" HorizontalAlignment="Left" Margin="605,174,0,0" VerticalAlignment="Top" Width="141" Height="46" Click="Button_Click"/>
     </Grid>
 </Window>

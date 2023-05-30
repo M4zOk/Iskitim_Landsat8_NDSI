@@ -24,16 +24,20 @@ namespace Iskitim
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-  
             NDSI_colculate nDSI_Colculate = new NDSI_colculate();
             nDSI_Colculate.Show();
-
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Colibration colib = new Colibration();
             colib.Show();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Graph gr = new Graph();
+            gr.Show();
         }
     }
 }
