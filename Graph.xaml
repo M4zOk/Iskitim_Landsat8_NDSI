@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:oxy="clr-namespace:OxyPlot.Wpf;assembly=OxyPlot.Wpf"
         xmlns:local="clr-namespace:Iskitim"
         mc:Ignorable="d"
         Title="Graph" Height="450" Width="800">
-    <Grid>
-        
+    <Grid Margin="81,63,0,0">
+        <oxy:PlotView x:Name="plotView" Margin="-37,-34,37,34">
+
+        </oxy:PlotView>
+        <Button Content="Сохранить график" HorizontalAlignment="Left" Margin="262,337,0,0" VerticalAlignment="Top" Width="134" Height="25" Click="Button_Click"/>
     </Grid>
 </Window>

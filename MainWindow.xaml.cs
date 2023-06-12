@@ -32,13 +32,7 @@ namespace Iskitim
         {
             Colibration colib = new Colibration();
             colib.Show();
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            Graph gr = new Graph();
-            gr.Show();
-        }
+        }   
     }
 }
     

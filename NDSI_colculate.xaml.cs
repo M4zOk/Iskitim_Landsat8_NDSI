@@ -17,7 +17,10 @@ using System.Windows.Controls;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Shapes;
-
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Wpf;
+using OxyPlot.Axes;
 
 namespace Iskitim
 {
@@ -37,161 +40,158 @@ namespace Iskitim
             {
                 MessageBox.Show("Ошибка: значение должно быть числом.");
             }
-
-            double number;
-            bool isNumeric = double.TryParse(txt.Text, out number);
-            if (!isNumeric || number < 0.1 || number > 0.6)
-            {
-                MessageBox.Show("Ошибка! Введите число от 0.1 до 0.6.");
-            }
-
-
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Filter = "(*.tif)|*.tif";
-
-            string path = "C:\\";
-            openFileDialog.InitialDirectory = path;
-            if (openFileDialog.ShowDialog() == true)
-                path = openFileDialog.FileName;
-
-
-            if (path == "C:\\")
-            {
-                return;
-            }
             else
             {
-
-                string path2 = "C:\\";
-                openFileDialog.InitialDirectory = path;
-                if (openFileDialog.ShowDialog() == true)
-                    path2 = openFileDialog.FileName;
-
-                if (path2 == "C:\\")
+                double number;
+                bool isNumeric = double.TryParse(txt.Text, out number);
+                if (!isNumeric || number < 0.1 || number > 0.6)
                 {
-                    return;
+                    MessageBox.Show("Ошибка! Введите число от 0.1 до 0.6.");
                 }
                 else
                 {
+                    OpenFileDialog openFileDialog = new OpenFileDialog();
+                    SaveFileDialog dlg = new SaveFileDialog();
+                    dlg.Filter = "(*.tif)|*.tif";
 
-                    Gdal.AllRegister();
+                    string path = "C:\\";
+                    openFileDialog.InitialDirectory = path;
+                    if (openFileDialog.ShowDialog() == true)
+                        path = openFileDialog.FileName;
 
-                    // Загружаем данные красного канала.
-                    Dataset redDataset = Gdal.Open(path, Access.GA_ReadOnly);
-                    Band redBand = redDataset.GetRasterBand(1);
 
-                    // Загружаем данные инфракрасного канала.
-                    Dataset nirDataset = Gdal.Open(path2, Access.GA_ReadOnly);
-                    Band nirBand = nirDataset.GetRasterBand(1);
-
-                    // Проверяем, что размеры образцов совпадают и что они не слишком велики.
-                    int width = redBand.XSize;
-                    int height = redBand.YSize;
-                    if (width != nirBand.XSize || height != nirBand.YSize)
+                    if (path == "C:\\")
                     {
-                        throw new ArgumentException("Размеры образцов не совпадают.");
+                        return;
                     }
-                    if (width > 5000 || height > 5000)
+                    else
                     {
-                        throw new ArgumentException("Размер образцов слишком велик, это может привести к проблемам с производительностью.");
-                    }
+                        string path2 = "C:\\";
+                        openFileDialog.InitialDirectory = path;
+                        if (openFileDialog.ShowDialog() == true)
+                            path2 = openFileDialog.FileName;
 
-                    // Выделяем память под массивы красного и инфракрасного каналов.
-                    float[] red = new float[width * height];
-                    float[] nir = new float[width * height];
-
-                    // Читаем данные из файлов в массивы.
-                    redBand.ReadRaster(0, 0, width, height, red, width, height, 0, 0);
-                    nirBand.ReadRaster(0, 0, width, height, nir, width, height, 0, 0);
-
-                    // Рассчитываем NDSI в каждой точке.
-                    double[] ndsi = new double[width * height];
-                    string str = txt.Text;
-                    double porog = Convert.ToDouble(str);
-                    for (int i = 0; i < width * height; i++)
-                    {
-                        ndsi[i] = (red[i] - nir[i]) / (red[i] + nir[i]);
-                        if (ndsi[i] > porog)
+                        if (path2 == "C:\\")
                         {
-                            ndsi[i] = 255; // Белый цвет
+                            return;
                         }
-
-                        Console.WriteLine(ndsi[i]);
-                    }
-
-                    string path3 = "C:\\";
-                    dlg.InitialDirectory = path2;
-                    if (dlg.ShowDialog() == true)
-                        path3 = dlg.FileName;
-
-                    // Сохраняем результат в новый файл.
-                    Gdal.AllRegister();
-                    Driver driver = Gdal.GetDriverByName("GTiff");
-                    Dataset ndsiDataset = driver.Create(path3, width, height, 1, DataType.GDT_Float32, null);
-                    ndsiDataset.SetProjection(redDataset.GetProjection());
-                    //ndsiDataset.SetGeoTransform(redDataset.GetGeoTransform());
-                    Band ndsiBand = ndsiDataset.GetRasterBand(1);
-                    ndsiBand.WriteRaster(0, 0, width, height, ndsi, width, height, 0, 0);
-                    ndsiDataset.FlushCache();
-                    // Освобождаем ресурсы.
-                    redBand.Dispose();
-                    redDataset.Dispose();
-                    nirBand.Dispose();
-                    nirDataset.Dispose();
-                    ndsiBand.Dispose();
-                    ndsiDataset.Dispose();
-
-                    MessageBoxResult result = MessageBox.Show("файл успешно сохранен");
-
-
-
-                    // открываем изображение
-                    Bitmap bmp = new Bitmap(path3);
-                    // определяем цвет, который нужно заменить
-                    Color replaceColor = Color.White;
-                    // определяем цвет, на который нужно заменить
-                    Color newColor = Color.Yellow;
-
-                    // проходим по каждому пикселю изображения
-                    for (int y = 0; y < bmp.Height; y++)
-                    {
-                        for (int x = 0; x < bmp.Width; x++)
+                        else
                         {
-                            // получаем текущий цвет пикселя
-                            Color pixelColor = bmp.GetPixel(x, y);
-                            // проверяем, если цвет пикселя соответствует цвету, который нужно заменить
-                            if (pixelColor.ToArgb() == replaceColor.ToArgb())
+                            Gdal.AllRegister();
+
+                            // Загружаем данные красного канала.
+                            Dataset redDataset = Gdal.Open(path, Access.GA_ReadOnly);
+                            Band redBand = redDataset.GetRasterBand(1);
+
+                            // Загружаем данные инфракрасного канала.
+                            Dataset nirDataset = Gdal.Open(path2, Access.GA_ReadOnly);
+                            Band nirBand = nirDataset.GetRasterBand(1);
+
+                            // Проверяем, что размеры образцов совпадают и что они не слишком велики.
+                            int width = redBand.XSize;
+                            int height = redBand.YSize;
+                            if (width != nirBand.XSize || height != nirBand.YSize)
                             {
-                                // заменяем цвет пикселя на новый
-                                bmp.SetPixel(x, y, newColor);
+                                throw new ArgumentException("Размеры образцов не совпадают.");
+                            }
+                            if (width > 5000 || height > 5000)
+                            {
+                                throw new ArgumentException("Размер образцов слишком велик, это может привести к проблемам с производительностью.");
+                            }
+
+                            // Выделяем память под массивы красного и инфракрасного каналов.
+                            float[] red = new float[width * height];
+                            float[] nir = new float[width * height];
+
+                            // Читаем данные из файлов в массивы.
+                            redBand.ReadRaster(0, 0, width, height, red, width, height, 0, 0);
+                            nirBand.ReadRaster(0, 0, width, height, nir, width, height, 0, 0);
+
+                            // Рассчитываем NDSI в каждой точке.
+                            double[] ndsi = new double[width * height];
+                            string str = txt.Text;
+                            double porog = Convert.ToDouble(str);
+                            for (int i = 0; i < width * height; i++)
+                            {
+                                ndsi[i] = (red[i] - nir[i]) / (red[i] + nir[i]);
+                                if (ndsi[i] > porog)
+                                {
+                                    ndsi[i] = 255; // Белый цвет
+                                }
+
+                                Console.WriteLine(ndsi[i]);
+                            }
+
+                            string path3 = "C:\\";
+                            dlg.InitialDirectory = path2;
+                            if (dlg.ShowDialog() == true)
+                                path3 = dlg.FileName;
+
+                            // Сохраняем результат в новый файл.
+                            Gdal.AllRegister();
+                            Driver driver = Gdal.GetDriverByName("GTiff");
+                            Dataset ndsiDataset = driver.Create(path3, width, height, 1, DataType.GDT_Float32, null);
+                            ndsiDataset.SetProjection(redDataset.GetProjection());
+                            //ndsiDataset.SetGeoTransform(redDataset.GetGeoTransform());
+                            Band ndsiBand = ndsiDataset.GetRasterBand(1);
+                            ndsiBand.WriteRaster(0, 0, width, height, ndsi, width, height, 0, 0);
+                            ndsiDataset.FlushCache();
+                            // Освобождаем ресурсы.
+                            redBand.Dispose();
+                            redDataset.Dispose();
+                            nirBand.Dispose();
+                            nirDataset.Dispose();
+                            ndsiBand.Dispose();
+                            ndsiDataset.Dispose();
+
+                            MessageBoxResult result = MessageBox.Show("файл успешно сохранен");
+
+                            // открываем изображение
+                            Bitmap bmp = new Bitmap(path3);
+                            // определяем цвет, который нужно заменить
+                            Color replaceColor = Color.White;
+                            // определяем цвет, на который нужно заменить
+                            Color newColor = Color.Yellow;
+
+                            // проходим по каждому пикселю изображения
+                            for (int y = 0; y < bmp.Height; y++)
+                            {
+                                for (int x = 0; x < bmp.Width; x++)
+                                {
+                                    // получаем текущий цвет пикселя
+                                    Color pixelColor = bmp.GetPixel(x, y);
+                                    // проверяем, если цвет пикселя соответствует цвету, который нужно заменить
+                                    if (pixelColor.ToArgb() == replaceColor.ToArgb())
+                                    {
+                                        // заменяем цвет пикселя на новый
+                                        bmp.SetPixel(x, y, newColor);
+                                    }
+                                }
+                            }
+
+                            // сохраняем измененное изображение
+                            bmp.Save(path3 + "test.tif", System.Drawing.Imaging.ImageFormat.Tiff);
+
+                            bmp.Dispose();
+
+                            string photo = path3 + "test.tif";
+                            Console.WriteLine(path3);
+                            image.Source = new BitmapImage(new Uri(photo));
+
+                            string filePath = path3;
+
+                            try
+                            {
+                                // Удаляем файл
+                                File.Delete(filePath);
+                            }
+                            catch (IOException i)
+                            {
+                                Console.WriteLine("Произошла ошибка при удалении файла: " + i.Message);
                             }
                         }
                     }
-
-                    // сохраняем измененное изображение
-                    bmp.Save(path3 + "test.tif", ImageFormat.Tiff);
-
-                    bmp.Dispose();
-
-                    string photo = path3 + "test.tif";
-                    Console.WriteLine(path3);
-                    image.Source = new BitmapImage(new Uri(photo));
-
-
-                    string filePath = path3;
-
-                    try
-                    {
-                        // Удаляем файл
-                        File.Delete(filePath);
-                    }
-                    catch (IOException i)
-                    {
-                        Console.WriteLine("Произошла ошибка при удалении файла: " + i.Message);
-                    }
-                }    
-
+                }
             }
         }
 
@@ -199,8 +199,6 @@ namespace Iskitim
         {
             
         }
-
-
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -274,7 +272,7 @@ namespace Iskitim
                                 raster6[i, j] = (int)pixelColor6.R + (int)pixelColor6.G + (int)pixelColor6.B;
                             }
                         }
-
+                        //выделение пылевого загрязнения на панхроматичесом файле 
                         Bitmap cpandata8 = new Bitmap(image3.Width, image3.Height);
                         int[,] pandata8 = new int[image3.Width, image3.Height];
                         Color pixelColor8;
@@ -379,7 +377,6 @@ namespace Iskitim
                         // сохранение измененного изображения
                         cpandata8.Save("UserIMGS/processed_image.tif");
 
-
                         Bitmap combinateBitmap = new Bitmap(image3);
 
                         Graphics graphics = Graphics.FromImage(combinateBitmap);
@@ -409,6 +406,12 @@ namespace Iskitim
                     }
                 }
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Graph gr = new Graph();
+            gr.Show();
         }
     }
 }
