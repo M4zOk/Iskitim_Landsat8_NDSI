@@ -54,6 +54,7 @@ namespace Iskitim
                     SaveFileDialog dlg = new SaveFileDialog();
                     dlg.Filter = "(*.tif)|*.tif";
 
+
                     string path = "C:\\";
                     openFileDialog.InitialDirectory = path;
                     if (openFileDialog.ShowDialog() == true)
@@ -116,10 +117,9 @@ namespace Iskitim
                                 ndsi[i] = (red[i] - nir[i]) / (red[i] + nir[i]);
                                 if (ndsi[i] > porog)
                                 {
+                                    Console.WriteLine(ndsi[i]);
                                     ndsi[i] = 255; // Белый цвет
                                 }
-
-                                Console.WriteLine(ndsi[i]);
                             }
 
                             string path3 = "C:\\";
@@ -282,6 +282,7 @@ namespace Iskitim
                             {
                                 pixelColor8 = image3.GetPixel(i, j);
                                 pandata8[i, j] = (int)(0.2989 * pixelColor8.R + 0.5870 * pixelColor8.G + 0.1140 * pixelColor8.B);
+                                Console.WriteLine(pandata8[i, j]);
 
                                 double NDSIp = (raster3[i, j] - raster6[i, j]) / (double)(raster3[i, j] + raster6[i, j]);
                                 if (userndsi <= NDSIp && NDSIp <= 0.65)
@@ -385,12 +386,7 @@ namespace Iskitim
 
                         combinateBitmap.Save("UserIMGS/Final.tif");
 
-                        // открытие изображений в стандартном просмотрщике
-                        //System.Diagnostics.Process.Start("UserIMGS/image1.tif");
-                        //System.Diagnostics.Process.Start("UserIMGS/image2.tif");
-                        //System.Diagnostics.Process.Start("UserIMGS/image3.tif");
-                        //System.Diagnostics.Process.Start("UserIMGS/Final.tif");
-
+                       
                         Console.WriteLine("Обработка изображений завершена.");
 
                         string path3 = "C:\\";
@@ -403,8 +399,11 @@ namespace Iskitim
                         string photo = path3;
 
                         image.Source = new BitmapImage(new Uri(photo));
+                                                                        
+                        Hcal gr = new Hcal(path3);
+                        gr.Show();
                     }
-                }
+               }
             }
         }
 

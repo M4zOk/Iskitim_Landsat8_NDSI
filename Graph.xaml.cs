@@ -58,15 +58,14 @@ namespace Iskitim
 
         public Graph()
         {
-            InitializeComponent();
-
+            
             InitializeComponent();
 
             // Определение переменной model и инициализация
-            double[] x = { 15, 12, 8, 8, 7, 7, 7, 6, 5, 3 };
-            double[] y = { 10, 25, 17, 11, 13, 17, 20, 13, 9, 15 };
-
-            model = new PlotModel { Title = "Pearson Correlation" };
+            double[] x = {36,32,40,17,32,21,39,15,17,42,12,14,25,24,35,24,32,28,30,33};
+            double[] y = {50,47,58,28,51,40,52,16,32,55,18,27,44,31,43,25,43,31,38,38};
+            
+            model = new PlotModel { Title = "График корреляции" };
             model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, Title = "X" });
             model.Axes.Add(new LinearAxis { Position = AxisPosition.Left, Title = "Y" });
 
@@ -83,19 +82,48 @@ namespace Iskitim
 
             model.Series.Add(scatterSeries);
 
-            double correlation = Enumerable.Range(0, x.Length)
-                .Select(i => (x[i] - x.Average()) * (y[i] - y.Average()))
-                .Sum() / ((x.Length - 1) * x.Select(xi => Math.Pow(xi - x.Average(), 2)).Sum());
+            var n = x.Length;
+            var sumX = x.Sum();
+            var sumY = y.Sum();
+            var sumXY = x.Zip(y, (a, b) => a * b).Sum();
+            var sumX2 = x.Select(xi => xi * xi).Sum();
+            var sumY2 = y.Select(yi => yi * yi).Sum();
 
-            MessageBox.Show($"Коэффициент корреляции: {correlation:F2}");
+            var beta = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            var alpha = (sumY - beta * sumX) / n;
+
+            double correlation = (n * sumXY - sumX * sumY) / Math.Sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+
+            double R = correlation ;
+
+            var lineSeries = new LineSeries
+            {
+                Title = "Least Squares Regression",
+                Color = OxyColors.Red,
+                StrokeThickness = 1,
+                MarkerType = MarkerType.None,
+                ItemsSource = new[]
+                 {
+                   new DataPoint(x.Min(), alpha + beta * x.Min()),
+                   new DataPoint(x.Max(), alpha + beta * x.Max())
+                 }.ToList()
+            };
+
+            string formula = string.Format("y = {0:0.##}x + {1:0.##}", beta, alpha);
+            lable1.Content = formula;
+
+            string znac = string.Format("R² = {0:0.##}", R);
+            lable2.Content = znac;
+
+            model.Series.Add(lineSeries);
 
             plotView.Model = model;
-
 
             //double[] xData = { 1, 2, 3, 4, 5 };
             //double[] yData = { 2, 4, 6, 8, 10 };
 
             //PlotCorrelation(xData, yData);
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -113,8 +141,7 @@ namespace Iskitim
                     var pngExporter = new PngExporter { Width = 600, Height = 400 };
                     pngExporter.Export(model, fileStream);
                 }
-            }
-
+            }    
         }
     }
 }

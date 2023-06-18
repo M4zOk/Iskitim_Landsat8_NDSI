@@ -1,13 +1,13 @@
-﻿<Window x:Class="Iskitim.MainWindow"
+﻿<Window x:Class="Iskitim.MainWindow" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Iskitim"
         mc:Ignorable="d"
-        Title="Iskitim" Height="241" Width="448">
-    <Grid Margin="0,0,0,-6">
-        <Button Content="Расчет NDSI и полей загрязнения" HorizontalAlignment="Left" Margin="224,80,0,0" VerticalAlignment="Top" Height="61" Width="202" Click="Button_Click"/>
-        <Button Content="Масштабирование изображения" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Width="205" Height="61" Click="Button_Click_1"/>
+        Title="Главное окно" Height="241" Width="448" Background="#FFCCC9C9">
+    <Grid Margin="0,0,0,-6" HorizontalAlignment="Left" Width="448">
+        <Button Content="Расчет NDSI и полей загрязнения" Margin="224,80,0,0" VerticalAlignment="Top" Height="61" Click="Button_Click" HorizontalAlignment="Left" Width="202" Background="White"/>
+        <Button Content="Масштабирование изображения" Margin="10,80,233,0" VerticalAlignment="Top" Height="61" Click="Button_Click_1" Background="White"/>
     </Grid>
 </Window>

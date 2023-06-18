@@ -1,18 +1,18 @@
-﻿<Window x:Class="Iskitim.Colibration"
+﻿<Window x:Class="Iskitim.Colibration" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Iskitim"
         mc:Ignorable="d"
-        Title="Colibration" Height="232" Width="441">
+        Title="Масштабирование изображений" Height="232" Width="441" Background="#FFCCC9C9">
     <Grid Margin="0,0,10,-6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="62*"/>
             <ColumnDefinition Width="411*"/>
         </Grid.ColumnDefinitions>
-        <Button Content="Увеличить в 2 раза" HorizontalAlignment="Left" Margin="2,143,0,0" VerticalAlignment="Top" Height="44" Width="132" Click="Button_Click" Grid.Column="1"/>
-        <Button Content="Уменьшить в 2 раза" HorizontalAlignment="Left" Margin="203,145,0,0" VerticalAlignment="Top" Width="130" Height="42" Click="Button_Click_1" Grid.Column="1"/>
+        <Button Content="Увеличить в 2 раза" HorizontalAlignment="Left" Margin="2,143,0,0" VerticalAlignment="Top" Height="44" Width="132" Click="Button_Click" Grid.Column="1" Background="White"/>
+        <Button Content="Уменьшить в 2 раза" HorizontalAlignment="Left" Margin="203,145,0,0" VerticalAlignment="Top" Width="130" Height="42" Click="Button_Click_1" Grid.Column="1" Background="White"/>
         <Label Content="Для каналов 3 и 6 лучше использовать увеличение в 2 раза" HorizontalAlignment="Left" Margin="56,42,0,0" VerticalAlignment="Top" Width="354" Height="35" Grid.ColumnSpan="2"/>
         <Label Content="Для канала 8 лучше использовать уменьшение в 2 раза&#xA;" HorizontalAlignment="Left" Margin="56,77,0,0" VerticalAlignment="Top" Width="323" Height="35" Grid.ColumnSpan="2"/>
 
